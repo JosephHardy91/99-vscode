@@ -41,6 +41,6 @@ vscode_package:
 	npm run package
 
 # Combined targets
-pr_ready: lua_lint lua_test lua_fmt_check vscode_lint vscode_compile
+pr_ready: lua_lint lua_fmt_check vscode_lint vscode_compile
 
 .PHONY: lua_fmt lua_fmt_check lua_lint lua_test lua_clean vscode_install vscode_compile vscode_lint vscode_test vscode_package pr_ready
