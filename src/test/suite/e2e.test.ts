@@ -27,10 +27,29 @@ function multiply(x: number, y: number): number {
     fs.writeFileSync(testFile, testCode);
   });
 
-  teardown(() => {
-    // Clean up
+  teardown(async () => {
+    // Close all open editors to release file handles
+    await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+    
+    // Give time for file handles to be released
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Clean up with retry logic for Windows
     if (fs.existsSync(testWorkspace)) {
-      fs.rmSync(testWorkspace, { recursive: true, force: true });
+      try {
+        fs.rmSync(testWorkspace, { recursive: true, force: true });
+      } catch (err: any) {
+        // On Windows, files might still be locked, retry after a delay
+        if (err.code === 'EBUSY' || err.code === 'EPERM') {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          try {
+            fs.rmSync(testWorkspace, { recursive: true, force: true });
+          } catch (retryErr) {
+            // If still failing, log but don't fail the test
+            console.warn('Could not clean up test workspace:', retryErr);
+          }
+        }
+      }
     }
   });
 
