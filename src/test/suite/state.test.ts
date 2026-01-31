@@ -62,8 +62,9 @@ suite('State Test Suite', () => {
   });
 
   test('State should manage active requests', () => {
-    let cleaned = false;
-    const cleanUp = () => { cleaned = true; };
+    const cleanUp = () => { 
+      // Cleanup function
+    };
     
     const id = state.addActiveRequest(cleanUp, 1);
     assert.ok(id > 0);

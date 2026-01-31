@@ -9,7 +9,6 @@ suite('Language Service Test Suite', () => {
 }`;
     
     // Create a mock document
-    const lines = code.split('\n');
     const mockDoc = {
       languageId: 'typescript',
       getText: () => code,

@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import { Agents } from '../../extensions/agents';
+import { state } from '../../state';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -30,14 +31,9 @@ suite('Agents Test Suite', () => {
   });
 
   test('Should load rules from directory', () => {
-    // Mock state
-    const mockState = {
-      completion: { customRules: [testDir] },
-    };
-    
     // Temporarily set state
-    const originalRules = require('../../state').state.completion.customRules;
-    require('../../state').state.completion.customRules = [testDir];
+    const originalRules = state.completion.customRules;
+    state.completion.customRules = [testDir];
     
     const rules = Agents.loadRules();
     
@@ -46,7 +42,7 @@ suite('Agents Test Suite', () => {
     assert.ok(rules.custom.some(r => r.name === 'refactor'));
     
     // Restore original state
-    require('../../state').state.completion.customRules = originalRules;
+    state.completion.customRules = originalRules;
   });
 
   test('Should find rules in text with @ mentions', () => {

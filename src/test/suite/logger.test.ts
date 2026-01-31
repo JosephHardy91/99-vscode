@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { Logger, logger } from '../../logger/logger';
+import { logger } from '../../logger/logger';
 import { LogLevel } from '../../types';
 import * as os from 'os';
 import * as path from 'path';
