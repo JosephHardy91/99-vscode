@@ -86,9 +86,9 @@ export class NinetyNineState implements State {
   }
 
   refreshRules(): void {
-    // This will be implemented when we port the agents system
-    // For now, just initialize empty rules
-    this.rules = { custom: [], byName: new Map() };
+    // Import the agents system and load rules
+    const { Agents } = require('./extensions/agents');
+    this.rules = Agents.loadRules();
   }
 }
 
