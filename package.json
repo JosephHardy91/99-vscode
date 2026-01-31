@@ -4,6 +4,10 @@
   "description": "Streamlined AI-powered code assistance for targeted code editing",
   "version": "0.1.0",
   "publisher": "JosephHardy91",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JosephHardy91/99-vscode.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },

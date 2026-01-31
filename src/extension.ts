@@ -3,6 +3,7 @@ import { state } from './state';
 import { logger } from './logger/logger';
 import { LogLevel } from './types';
 import { registerCommands } from './commands';
+import { registerCompletionProvider } from './extensions/completion';
 
 export function activate(context: vscode.ExtensionContext): void {
   console.log('99 extension is now active');
@@ -41,6 +42,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Register commands
   registerCommands(context);
+
+  // Register completion provider for @ skills
+  registerCompletionProvider(context);
 
   // Watch for configuration changes
   context.subscriptions.push(
