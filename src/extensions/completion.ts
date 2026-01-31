@@ -6,8 +6,8 @@ export class SkillCompletionProvider implements vscode.CompletionItemProvider {
   provideCompletionItems(
     document: vscode.TextDocument,
     position: vscode.Position,
-    token: vscode.CancellationToken,
-    context: vscode.CompletionContext
+    _token: vscode.CancellationToken,
+    _context: vscode.CompletionContext
   ): vscode.CompletionItem[] | undefined {
     // Check if the character before the cursor is '@'
     const lineText = document.lineAt(position.line).text;

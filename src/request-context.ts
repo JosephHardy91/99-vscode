@@ -4,7 +4,7 @@ import * as os from 'os';
 import * as fs from 'fs';
 import { state } from './state';
 import { logger } from './logger/logger';
-import { Point, Range, Rule } from './types';
+import { Range, Rule } from './types';
 
 export class RequestContext {
   xid: number;

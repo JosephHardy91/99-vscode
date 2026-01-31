@@ -20,7 +20,7 @@ Instructions:
 Please implement the function.`;
   },
 
-  visualSelection: (range: Range) => {
+  visualSelection: (_range: Range) => {
     return `You are an AI assistant helping to process a code selection.
 
 Instructions:

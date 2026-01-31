@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { OpsOptions } from '../types';
-import { logger } from '../logger/logger';
 import { getId } from '../utils/id';
 import { RequestContext } from '../request-context';
 import { state } from '../state';

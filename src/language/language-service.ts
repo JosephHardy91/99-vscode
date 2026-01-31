@@ -20,7 +20,6 @@ class TypeScriptLanguageService implements LanguageService {
     // This is a simplified implementation - a real one would use tree-sitter or the TS language service
     let functionStart = -1;
     let braceDepth = 0;
-    let inFunction = false;
     let functionEnd = -1;
     let bodyStart = -1;
     let functionName = '';

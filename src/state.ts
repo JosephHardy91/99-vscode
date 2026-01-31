@@ -1,6 +1,7 @@
-import { State, CompletionConfig, Rules, RequestEntry, ActiveRequest, Rule } from './types';
+import { State, CompletionConfig, Rules, RequestEntry, ActiveRequest } from './types';
 import { logger } from './logger/logger';
 import { now } from './utils/id';
+import { Agents } from './extensions/agents';
 
 export class NinetyNineState implements State {
   model: string = 'opencode/claude-sonnet-4-5';
@@ -86,8 +87,6 @@ export class NinetyNineState implements State {
   }
 
   refreshRules(): void {
-    // Import the agents system and load rules
-    const { Agents } = require('./extensions/agents');
     this.rules = Agents.loadRules();
   }
 }
