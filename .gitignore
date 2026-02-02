@@ -1,1 +1,7 @@
 tmp
+node_modules
+out
+*.vsix
+.vscode-test
+.vscode-test-web
+*.log

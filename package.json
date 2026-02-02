@@ -1,0 +1,176 @@
+{
+  "name": "99",
+  "displayName": "99 - AI Code Assistant",
+  "description": "Streamlined AI-powered code assistance for targeted code editing",
+  "version": "0.1.0",
+  "publisher": "JosephHardy91",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JosephHardy91/99-vscode.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "ai",
+    "opencode",
+    "assistant",
+    "code-generation"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "99.fillInFunction",
+        "title": "99: Fill in Function"
+      },
+      {
+        "command": "99.fillInFunctionPrompt",
+        "title": "99: Fill in Function with Prompt"
+      },
+      {
+        "command": "99.visual",
+        "title": "99: Process Selection"
+      },
+      {
+        "command": "99.visualPrompt",
+        "title": "99: Process Selection with Prompt"
+      },
+      {
+        "command": "99.stopAllRequests",
+        "title": "99: Stop All Requests"
+      },
+      {
+        "command": "99.viewLogs",
+        "title": "99: View Logs"
+      },
+      {
+        "command": "99.prevRequestLogs",
+        "title": "99: Previous Request Logs"
+      },
+      {
+        "command": "99.nextRequestLogs",
+        "title": "99: Next Request Logs"
+      },
+      {
+        "command": "99.info",
+        "title": "99: Show Info"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "99.fillInFunction",
+        "key": "ctrl+shift+9 f",
+        "mac": "cmd+shift+9 f",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "99.visual",
+        "key": "ctrl+shift+9 v",
+        "mac": "cmd+shift+9 v",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "99.stopAllRequests",
+        "key": "ctrl+shift+9 s",
+        "mac": "cmd+shift+9 s"
+      }
+    ],
+    "configuration": {
+      "title": "99",
+      "properties": {
+        "99.logger.level": {
+          "type": "string",
+          "default": "info",
+          "enum": [
+            "debug",
+            "info",
+            "warn",
+            "error",
+            "fatal"
+          ],
+          "description": "Logging level for 99"
+        },
+        "99.logger.path": {
+          "type": "string",
+          "default": "",
+          "description": "Path to log file (leave empty for default temp location)"
+        },
+        "99.logger.printOnError": {
+          "type": "boolean",
+          "default": true,
+          "description": "Print errors to console"
+        },
+        "99.completion.customRules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Custom rule directories for skill completion"
+        },
+        "99.mdFiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "AGENT.md"
+          ],
+          "description": "MD files to auto-detect in project hierarchy"
+        },
+        "99.model": {
+          "type": "string",
+          "default": "opencode/claude-sonnet-4-5",
+          "description": "AI model to use"
+        },
+        "99.displayErrors": {
+          "type": "boolean",
+          "default": false,
+          "description": "Display error messages in UI"
+        },
+        "99.aiStdoutRows": {
+          "type": "number",
+          "default": 3,
+          "description": "Number of rows to display AI stdout"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "test:unit": "npm run compile && mocha out/test/suite/**/*.test.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.x",
+    "@types/node": "^20.x",
+    "@types/sinon": "^17.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.x",
+    "@typescript-eslint/parser": "^6.x",
+    "@vscode/test-electron": "^2.3.x",
+    "@vscode/vsce": "^2.x",
+    "eslint": "^8.x",
+    "mocha": "^10.x",
+    "sinon": "^17.x",
+    "typescript": "^5.3.x"
+  },
+  "dependencies": {
+    "web-tree-sitter": "^0.20.8"
+  }
+}

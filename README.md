@@ -2,6 +2,18 @@
 a few things changed.  completion is a bit different for skills.  i now require `@` to begin with
 ... ill try to update as it happens ...
 
+## VS Code Extension Available!
+
+This repository now includes a VS Code extension version of the 99 AI assistant. See [README-VSCODE.md](./README-VSCODE.md) for VS Code installation and usage instructions.
+
+The original Neovim plugin code is preserved in the [neovim/](./neovim/) directory.
+
+---
+
+# Neovim Plugin Documentation
+
+The following documentation is for the original Neovim plugin. For VS Code users, please see [README-VSCODE.md](./README-VSCODE.md).
+
 ### The Great Twitch Discussion
 I will conduct a stream on Jan 30 at 8am The Lords Time (Montana Time/Mountain Time (same thing))
 we will do an extensive deep dive on 99 and what we think is good and bad.
@@ -121,7 +133,7 @@ When prompting, if you have cmp installed as your autocomplete you can use an au
 How skill completion and inclusion works is that you start by typing `@`.
 
 ## API
-You can see the full api at [99 API](./lua/99/init.lua)
+You can see the full api at [99 API](./neovim/lua/99/init.lua)
 
 ## Reporting a bug
 To report a bug, please provide the full running debug logs.  This may require

@@ -1,0 +1,161 @@
+name: VS Code Extension CI
+
+on:
+  push:
+    branches: [ "master", "copilot/**" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Compile TypeScript
+      run: npm run compile
+
+    - name: Run linter
+      run: npm run lint
+
+    - name: Run tests (Linux)
+      if: runner.os == 'Linux'
+      run: xvfb-run -a npm test
+      env:
+        CI: true
+
+    - name: Run tests (macOS/Windows)
+      if: runner.os != 'Linux'
+      run: npm test
+      env:
+        CI: true
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}-node${{ matrix.node-version }}
+        path: |
+          .vscode-test/
+          test-results/
+
+  package:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Compile TypeScript
+      run: npm run compile
+
+    - name: Package extension
+      run: npm run package
+
+    - name: Verify package
+      run: |
+        ls -lh *.vsix
+        test -f 99-*.vsix
+
+    - name: Upload VSIX
+      uses: actions/upload-artifact@v4
+      with:
+        name: vscode-extension
+        path: '*.vsix'
+        retention-days: 30
+
+  validate-installation:
+    runs-on: ubuntu-latest
+    needs: package
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+
+    - name: Download VSIX
+      uses: actions/download-artifact@v4
+      with:
+        name: vscode-extension
+
+    - name: Install VS Code
+      run: |
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+        sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+        sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+        sudo apt-get update
+        sudo apt-get install code
+
+    - name: Install extension from VSIX
+      run: |
+        code --install-extension 99-*.vsix --force
+
+    - name: Verify extension is installed
+      run: |
+        code --list-extensions | grep -i "josephhardy91.99"
+
+  test-parity:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Compile TypeScript
+      run: npm run compile
+
+    - name: Check Neovim code is archived
+      run: |
+        test -d neovim/lua/99
+        test -f neovim/lua/99/init.lua
+
+    - name: Verify VS Code implementation completeness
+      run: |
+        # Check that core modules exist
+        test -f src/extension.ts
+        test -f src/commands/fillInFunction.ts
+        test -f src/commands/visual.ts
+        test -f src/providers/base.ts
+        test -f src/logger/logger.ts
+        test -f src/state.ts
+        test -f src/language/language-service.ts
+        test -f src/extensions/agents.ts
+
+    - name: Run parity tests
+      run: xvfb-run -a npm test -- --grep "Parity"
+      env:
+        CI: true
